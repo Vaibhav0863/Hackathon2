@@ -21,5 +21,19 @@ def student_menu(student):
 	while(ch):
 		if ch == 1:
 			print("Register Student")
+		elif ch == 2:
+			print("SIGN IN")
+		elif ch == 3:
+			print("LIST COURSES")
+		elif ch == 4:
+			print("LIST CENTERS")
+		elif ch == 5:
+			print("GIVEN PREFERENCES")
+		elif ch == 6:
+			print("SEE ALLOCATED CENTERS AND COURSES")
+		elif ch == 7:
+			print("UPDATE PAYMENT DETAILS")
+		else:
+			print("INVALID INPUT")
 		ch = getChoice()
 
