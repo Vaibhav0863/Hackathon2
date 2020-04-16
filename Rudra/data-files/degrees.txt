@@ -1,0 +1,11 @@
+10th
+12th
+Diploma
+B.Sc.
+M.Sc. Computer
+M.Sc. Statistics
+B.E. Computer
+B.E. Electronics
+B.E. Mechanical
+B.E. Electrical
+B.E. Civil
