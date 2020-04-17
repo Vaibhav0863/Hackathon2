@@ -89,8 +89,8 @@ def round1():
 
 	student_data = sorted(student_data, key = lambda row : int(row['form_no']))
 
-	pushF('student_demo.csv',student_data)
-	pushF('capacity_demo.csv',capacity_data)
+	pushF('student_round1.csv',student_data)
+	pushF('capacity_round1.csv',capacity_data)
 
 
 # THIS IS FOR ALLOCATION ROUND 2
@@ -136,5 +136,5 @@ def round2():
 	pushF('student_round2.csv',student_data)
 	pushF('capacity_round2.csv',capacity_data)
 
-
+round1()
 round2()
