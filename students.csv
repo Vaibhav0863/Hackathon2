@@ -1,0 +1,11 @@
+form_no,name,A,B,C,degree,precentage,allocated_preference,allocated_course_name,allocated_center_id,payment,reported_to_center,prn
+1,tisha,73,135,76,M.Sc. Statistics,84.9,0,NA,NA,0,0,NA
+2,siya,155,65,19,B.E. Mechanical,84.82,0,NA,NA,0,0,NA
+3,dia,19,110,54,B.E. Electrical,84.71,0,NA,NA,0,0,NA
+4,manish,21,13,-1,B.E. Electrical,84.55,0,NA,NA,0,0,NA
+5,aishwarya,165,159,-1,M.Sc. Statistics,84.19,0,NA,NA,0,0,NA
+6,arjun,101,121,107,B.E. Computer,84.16,0,NA,NA,0,0,NA
+7,niti,143,83,84,B.E. Civil,83.94,0,NA,NA,0,0,NA
+8,isha,38,6,10,B.Sc.,83.82,0,NA,NA,0,0,NA
+9,anu,37,47,71,B.E. Mechanical,83.81,0,NA,NA,0,0,NA
+10,rutuja,24,58,88,B.E. Mechanical,83.56,0,NA,NA,0,0,NA

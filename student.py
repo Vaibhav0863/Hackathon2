@@ -1,13 +1,5 @@
 from data import *
 
-
-class Student:
-	def __init__(self,name="VAIABHAV"):
-		self.name = name
-
-	def display(self):
-		print(self.name)
-
 def menu():
 	print("\n0. SIGN OUT\n1. LIST COURSES\n2. LIST CENTERS\n3. GIVE PREFERENCES\n4. SEE ALLOCATED CENTER COURSES\n5. UPDATE PAYMENT DETAILS")
 	op = int(input("Enter your choice : "))
@@ -42,7 +34,8 @@ def isValid(student_data):
 	else:
 		raise Exception("Invalid Form Number")
 
-def student_menu(student):
+def student_menu():
+	print("\n\t\tSTUDENT SYSTEM\t\t\n")
 	student_data = pull("data-files/students.csv")
 	ch = getChoice()
 	while(ch):
@@ -56,37 +49,37 @@ def student_menu(student):
 					op = menu()
 					while(op):
 						if op == 1:
+							# THIS OF GETTING LIST OF COURSES
 							course_data = pull("data-files/courses.csv")
 
-							print("=====================================")
+							print("================================================")
 							print("\t\tAVAILABLE COURSES\t\t\n")
 							for row in range(1,len(course_data)):
 								print(f'Course Name : {course_data[row]["name"]}\nFees : {course_data[row]["fees"]}\nSection Rank Required : {course_data[row]["section"]}\n\n')
-							print("=====================================")
+							print("================================================")
 						elif op == 2:
-							print("LIST CENTERS")
+							# THIS IS FOR GETTING LIST OF CENTER
+							center_data = pull('data-files/centers.csv')
+							center_data.pop(0)
+							print("================================================")
+							print("\t\tAVAILABLE CENTERS\t\t\n")
+
+							for row in center_data:
+								print(f'Center Name : {row["center_name"]}\nCenter Co-ordinator : {row["coordinator"]}\nAddress : {row["address"]}\n\n')
+							print("================================================")
 						elif op == 3:
 							print("GIVE PREFERENCES")
 						elif op == 4:
 							print("SEE ALLOCATED COURSES/CENTERS")
 						elif op == 5:
 							print("UPDATE PAYMENT DETAILS")
+							print(data)
 						else:
 							print("Invalid input");
 						op = menu()
 
 			except Exception as ex:
 				print(ex)
-		elif ch == 3:
-			print("LIST COURSES")
-		elif ch == 4:
-			print("LIST CENTERS")
-		elif ch == 5:
-			print("GIVEN PREFERENCES")
-		elif ch == 6:
-			print("SEE ALLOCATED CENTERS AND COURSES")
-		elif ch == 7:
-			print("UPDATE PAYMENT DETAILS")
 		else:
 			print("INVALID INPUT")
 		ch = getChoice()
