@@ -46,6 +46,7 @@ def student_menu():
 			try:
 				data = isValid(student_data)
 				if len(data)!=0:
+					# print(data)
 					op = menu()
 					while(op):
 						if op == 1:

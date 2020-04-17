@@ -62,7 +62,7 @@ def decrementer(capacity,student):
 # THIS IS FOR ALLOCATION ROUND 1
 
 def round1():
-	student_data = pull('students.csv')
+	student_data = pull('data-files/students.csv')
 	student_data.pop(0)
 
 	capacity_data = pull("data-files/capacities.csv")
@@ -82,7 +82,7 @@ def round1():
 				
 
 				if preferances != -1:
-					if preferances[rnd][rnd] in courses:
+					if preferances[0][rnd] in courses:
 						course_name,center_id,preference_no = preferances[rnd]
 						incrementor(capacity_data,center_id,course_name,preference_no,row)
 			
@@ -96,10 +96,10 @@ def round1():
 # THIS IS FOR ALLOCATION ROUND 2
 
 def round2():
-	student_data = pull('student_demo.csv')
+	student_data = pull('student_round1.csv')
 	student_data.pop(0)
 
-	capacity_data = pull("capacity_demo.csv")
+	capacity_data = pull("capacity_round1.csv")
 	capacity_data.pop(0)
 
 	rnd = 0 # THIS IS FOR COUNCELLING ROUND
@@ -116,18 +116,20 @@ def round2():
 		# FIRST SORT STUDENT DATA BY SECTION
 		student_data = sorted(student_data,key = lambda row : int(row[rank]))
 		for row in student_data:
+			preferances = getPerefList(row['form_no'])
+			courses = getCourses(rank)
 			# Student get preferece and also make payment
 			if int(row['allocated_preference']) != 0 and int(row['payment']) != 0:
 				print("YES")
 			# student get preference but does not make payment
-			elif row['allocated_course_name'] != 'NA' and int(row['payment']) == 0:
-				decrementer(capacity_data,row)
+			elif row['allocated_preference'] != '0' and int(row['payment']) == 0:
+				if preferances[0][rnd] in courses:
+					decrementer(capacity_data,row)
 			else:
 				if int(row[rank]) > 0 and int(row['allocated_preference']) == 0:
-					preferances = getPerefList(row['form_no'])
-					courses = getCourses(rank)
-					if preferances != -1:
-						if preferances[rnd][rnd] in courses:
+
+					if preferances != -1 :
+						if preferances[0][rnd] in courses:
 							course_name,center_id,preference_no = preferances[rnd]
 							incrementor(capacity_data,center_id,course_name,preference_no,row)
 
