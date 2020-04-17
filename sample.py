@@ -3,8 +3,6 @@ from data import *
 def getCourses(sec):
 	course_data = pull("data-files/courses.csv")
 
-	course_data.pop(0)
-
 	courses = {}
 
 	sections = ["A","B","C"]
@@ -21,9 +19,6 @@ def getCourses(sec):
 def getPerefList(id):
 	preference_data = pull('data-files/preferences.csv')
 	student_data = pull('data-files/students.csv')
-
-	preference_data.pop(0)
-	student_data.pop(0)
 
 	preference_dict = {}
 
@@ -63,10 +58,8 @@ def decrementer(capacity,student):
 
 def round1():
 	student_data = pull('data-files/students.csv')
-	student_data.pop(0)
 
 	capacity_data = pull("data-files/capacities.csv")
-	capacity_data.pop(0)
 
 	rnd = 0 # THIS IS FOR COUNCELLING ROUND
 
@@ -97,10 +90,8 @@ def round1():
 
 def round2():
 	student_data = pull('student_round1.csv')
-	student_data.pop(0)
 
 	capacity_data = pull("capacity_round1.csv")
-	capacity_data.pop(0)
 
 	rnd = 0 # THIS IS FOR COUNCELLING ROUND
 

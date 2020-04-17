@@ -6,8 +6,6 @@ def pull(file_path):
 
 		data = []
 
-		data.append(reader.fieldnames)
-
 		for row in reader:
 			data.append(row)
 
