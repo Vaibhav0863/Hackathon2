@@ -1,4 +1,5 @@
 from data import *
+from Algorithm import *
 
 # Getting Choice from use
 def getChoice():
@@ -41,6 +42,8 @@ def isValid():
 
 def admin_menu():
 	print("\n\t\tADMIN SYSTEM\t\t\n")
+	student_data = pull("data-files/students.csv")
+	capacity_data = pull("data-files/capacities.csv")
 	ch = getChoice()
 
 	while(ch):
@@ -48,32 +51,34 @@ def admin_menu():
 			try:
 				if isValid():
 					op = getMenuChoice()
-					course_data = pull("data-files/courses.csv")
-					center_data = pull("data-files/centers.csv")
-					student_data = pull("data-files/students.csv")
 					while op:
 						if op == 1:
+							course_data = pull("data-files/courses.csv")
+
 							print("================================================")
 							print("\t\tAVAILABLE COURSES\t\t\n")
-							for row in range(1,len(course_data)):
-								print(f'Course Name : {course_data[row]["name"]}\nFees : {course_data[row]["fees"]}\nSection Rank Required : {course_data[row]["section"]}\n\n')
+							for row in course_data:
+								print(f'Course Name : {row["name"]}\nFees : {row["fees"]}\nSection Rank Required : {row["section"]}\n\n')
 							print("================================================")
+						
 						elif op == 2:
-							center_data.pop(0)
+							center_data = pull('data-files/centers.csv')
 							print("================================================")
 							print("\t\tAVAILABLE CENTERS\t\t\n")
-
 							for row in center_data:
 								print(f'Center Name : {row["center_name"]}\nCenter Co-ordinator : {row["coordinator"]}\nAddress : {row["address"]}\n\n')
 							print("================================================")
+						
 						elif op == 3:
 							print("List Student")
 						elif op == 4:
 							print("Update Student Rank")
 						elif op == 5:
-							print("Allocation of center (Round 1)")
+							student_data,capacity_data=round1(student_data,capacity_data)
+
 						elif op == 6:
-							print("Allocation of center (Round 2)")
+							student_data,capacity_data=round2(student_data,capacity_data)
+
 						elif op == 7:
 							print("List Allocated Student")
 						elif op == 8:
@@ -93,3 +98,5 @@ def admin_menu():
 			print("Invalid Input")
 
 		ch = getChoice()
+	pushF("data-files/students.csv",student_data)
+	pushF("data-files/capacities.csv",capacity_data)

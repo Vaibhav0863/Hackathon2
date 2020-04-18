@@ -51,7 +51,7 @@ def decrementer(capacity,student):
 				capacity_row['count'] = str(int(capacity_row["count"])-1)
 				student['allocated_course_name'] = 'NA'
 				student['allocated_center_id'] = 'NA'
-				student['allocated_preference'] = '0'
+				student['allocated_preference'] = '-1'
 
 
 # THIS IS FOR ALLOCATION ROUND 1
@@ -70,14 +70,17 @@ def round1():
 		student_data = sorted(student_data,key = lambda row : int(row[rank]))
 		for row in student_data:
 			if int(row[rank]) > 0 and int(row['allocated_preference']) == 0:
-				preferances = getPerefList(row['form_no'])
+				preferances_data = getPerefList(row['form_no'])
 				courses = getCourses(rank)
 				
 
-				if preferances != -1:
-					if preferances[0][rnd] in courses:
-						course_name,center_id,preference_no = preferances[rnd]
-						incrementor(capacity_data,center_id,course_name,preference_no,row)
+				if preferances_data != -1:
+					for preferances in preferances_data:
+						if preferances[0] in courses:
+							course_name,center_id,preference_no = preferances
+							incrementor(capacity_data,center_id,course_name,preference_no,row)
+							break
+					
 			
 
 	student_data = sorted(student_data, key = lambda row : int(row['form_no']))
@@ -107,23 +110,32 @@ def round2():
 		# FIRST SORT STUDENT DATA BY SECTION
 		student_data = sorted(student_data,key = lambda row : int(row[rank]))
 		for row in student_data:
-			preferances = getPerefList(row['form_no'])
+			preferances_data = getPerefList(row['form_no'])
 			courses = getCourses(rank)
+					
 			# Student get preferece and also make payment
 			if int(row['allocated_preference']) != 0 and int(row['payment']) != 0:
 				print("YES")
 			# student get preference but does not make payment
 			elif row['allocated_preference'] != '0' and int(row['payment']) == 0:
-				if preferances[0][rnd] in courses:
-					decrementer(capacity_data,row)
+				if preferances_data != -1:
+					for preferances in preferances_data:
+						if preferances[0] in courses:
+							decrementer(capacity_data,row)
+							break
+				# if preferances_data[0][rnd] in courses:
+				# 	decrementer(capacity_data,row)
 			else:
 				if int(row[rank]) > 0 and int(row['allocated_preference']) == 0:
 
-					if preferances != -1 :
-						if preferances[0][rnd] in courses:
-							course_name,center_id,preference_no = preferances[rnd]
-							incrementor(capacity_data,center_id,course_name,preference_no,row)
+					if preferances_data != -1:
+						for preferances in preferances_data:
+							if preferances[0] in courses:
+								course_name,center_id,preference_no = preferances
+								incrementor(capacity_data,center_id,course_name,preference_no,row)
+								break
 
+	
 	student_data = sorted(student_data, key = lambda row : int(row['form_no']))
 
 	pushF('student_round2.csv',student_data)

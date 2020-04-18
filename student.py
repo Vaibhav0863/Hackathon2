@@ -1,4 +1,5 @@
 from data import *
+from Algorithm import *
 
 def menu():
 	print("\n0. SIGN OUT\n1. LIST COURSES\n2. LIST CENTERS\n3. GIVE PREFERENCES\n4. SEE ALLOCATED CENTER COURSES\n5. UPDATE PAYMENT DETAILS")
@@ -36,7 +37,8 @@ def isValid(student_data):
 
 def student_menu():
 	print("\n\t\tSTUDENT SYSTEM\t\t\n")
-	student_data = pull("students.csv")
+	student_data = pull("data-files/students.csv")
+	capacity_data = pull("data-files/capacities.csv")
 	ch = getChoice()
 	while(ch):
 		if ch == 1:
@@ -75,7 +77,7 @@ def student_menu():
 						elif op == 4:
 							print("SEE ALLOCATED COURSES/CENTERS")
 						elif op == 5:
-							if student_data[index]['allocated_preference'] != '0':
+							if student_data[index]['allocated_preference'] == '0':
 								print(f'Sorry {student_data[index]["name"]}! There is no center allocated to you.')
 							else:
 								print(f'Hello {student_data[index]["name"]}, your allocated center is {student_data[index]["allocated_center_id"]} for {student_data[index]["allocated_course_name"]}.')
@@ -92,4 +94,5 @@ def student_menu():
 		else:
 			print("INVALID INPUT")
 		ch = getChoice()
+	pushF("data-files/students.csv",student_data)
 
