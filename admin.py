@@ -80,7 +80,12 @@ def admin_menu():
 							student_data,capacity_data=round2(student_data,capacity_data)
 
 						elif op == 7:
-							print("List Allocated Student")
+							cnt = 0
+							for row in student_data:
+								if row['allocated_course_name'] != 'NA':
+									print(f'{row["form_no"]}=={row["name"]}=={row["allocated_course_name"]}=={row["allocated_center_id"]}')
+									cnt+=1
+							print(cnt)
 						elif op == 8:
 							print("List of Paid Student")
 						elif op == 9:
