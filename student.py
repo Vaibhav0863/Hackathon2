@@ -1,6 +1,23 @@
 from data import *
-from Algorithm import *
+from Algorithm import getPerefList
 from studentRegistration import studentRegistration,getEligibility
+
+# This function return preferences given by student [course,center_id]
+def getPreferenceList(student_data):
+	preference_data = pull('data-files/preferences.csv')
+
+	preference_dict = dict()
+
+	for row in student_data:
+		temp = []
+
+		for pref_row in preference_data:
+			if row["form_no"] == pref_row["form_no"]:
+				temp.append([pref_row['course'],pref_row['center_id']])
+		if len(temp)!=0:
+			preference_dict[row['form_no']] = temp
+
+	return preference_dict
 
 def menu():
 	print("\n0. SIGN OUT\n1. LIST COURSES\n2. LIST CENTERS\n3. GIVE PREFERENCES\n4. SEE ALLOCATED CENTER COURSES\n5. UPDATE PAYMENT DETAILS")
@@ -38,14 +55,23 @@ def isValid(student_data):
 
 def student_menu():
 	print("\n\t\tSTUDENT SYSTEM\t\t\n")
+	# THIS IS USED TO GET STUDENT RECORD
 	student_data = pull("data-files/students.csv")
-	# capacity_data = pull("data-files/capacities.csv")
+	# THIS IS USED FOR APPENDING PREFERENCES GIVEN BY STUDENT
+	preference_data = pull("data-files/preferences.csv")
+	# THIS IS FOR GETTING LIST OF CENTER
+	center_data = pull('data-files/centers.csv')
+
+
+	preference_list = getPreferenceList(student_data)
 	eligibility_data = getEligibility()
 	form_number = len(student_data)
 	form_number +=1
 	ch = getChoice()
 	while(ch):
 		if ch == 1:
+			print(' \n'.center(55,'='))
+			print("Student Registration\n".center(45,' '))
 			new_student_data = dict()
 			newStudent = studentRegistration(form_number,eligibility_data)
 			try:
@@ -56,8 +82,9 @@ def student_menu():
 			
 			if len(new_student_data)!=0:
 				student_data.append(new_student_data)
+				print("New Student Registered Successfully!")
 				form_number+=1
-			
+			print('\n '.center(55,'='))
 		elif ch == 2:
 			# Validating Student
 			try:
@@ -81,8 +108,7 @@ def student_menu():
 
 
 						elif op == 2:
-							# THIS IS FOR GETTING LIST OF CENTER
-							center_data = pull('data-files/centers.csv')
+							
 							print("================================================")
 							print("\t\tAVAILABLE CENTERS\t\t\n")
 							for row in center_data:
@@ -91,7 +117,50 @@ def student_menu():
 
 
 						elif op == 3:
-							print("GIVE PREFERENCES")
+							pref_list = preference_list.get(student_data[index]['form_no'],[])
+							cnt = len(pref_list)
+							cnt+=1
+							courses = eligibility_data.get(student_data[index]['degree'])
+							courses = courses[1]
+							available_preferences = []
+							if pref_list != -1:
+								for center_row in center_data:
+									for course in courses:
+										if [course,center_row['center_id']] not in pref_list:
+											available_preferences.append([course,center_row['center_id']])
+							print("====================================================")
+							print("\t\tGIVE YOUR PREFERENCE\t\t\n")
+							while True:
+								if cnt>10:
+									print("10 preferences are already given")
+									break
+								print("0. EXIT")
+								idx = 1
+								for row in available_preferences:
+									print(f'{idx}. {row[0]} {row[1	]}')
+									idx+=1
+								
+								pref_no = int(input("Enter Your Preference Number : "))
+								if pref_no == 0:
+									break
+								elif pref_no>=1 and pref_no <= idx:
+									data = available_preferences.pop(pref_no - 1)
+									print({'form_no' : student_data[index]['form_no'],'preference_no' : str(cnt),'course'  : data[0],'center_id' : data[1]})
+									preference_data.append({'form_no' : student_data[index]['form_no'],'preference_no' : str(cnt),'course'  : data[0],'center_id' : data[1]})
+									cnt+=1
+									print("Your Preference Saved...")
+								else:
+									print("Please Enter valid preference number...!")
+								
+								
+								ch = input("Do you want to continue...(y/n)")
+								if ch == 'n':
+									break
+							
+							preference_data = sorted(preference_data,key = lambda row : int(row['form_no']))
+
+
+								
 						elif op == 4:
 							# For giving acknowledgement to student about their allocation
 							data = student_data[index]
@@ -121,4 +190,5 @@ def student_menu():
 			print("INVALID INPUT")
 		ch = getChoice()
 	pushF("data-files/students.csv",student_data)
+	pushF("data-files/preferences.csv",preference_data)
 
