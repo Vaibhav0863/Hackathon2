@@ -44,6 +44,10 @@ def admin_menu():
 	print("\n\t\tADMIN SYSTEM\t\t\n")
 	student_data = pull("data-files/students.csv")
 	capacity_data = pull("data-files/capacities.csv")
+
+	preference_dict = getPerefList() # return key and value pair of form no. and list of their preferences
+	course_dict = getCourses()
+
 	ch = getChoice()
 
 	while(ch):
@@ -53,16 +57,20 @@ def admin_menu():
 					op = getMenuChoice()
 					while op:
 						if op == 1:
+							# Getting list of Courses provided by CDAC 
 							course_data = pull("data-files/courses.csv")
 
 							print("================================================")
 							print("\t\tAVAILABLE COURSES\t\t\n")
+							print("================================================")
 							for row in course_data:
 								print(f'Course Name : {row["name"]}\nFees : {row["fees"]}\nSection Rank Required : {row["section"]}\n\n')
 							print("================================================")
 						
 						elif op == 2:
+							# Getting list of CDAC traning centers
 							center_data = pull('data-files/centers.csv')
+
 							print("================================================")
 							print("\t\tAVAILABLE CENTERS\t\t\n")
 							for row in center_data:
@@ -70,16 +78,24 @@ def admin_menu():
 							print("================================================")
 						
 						elif op == 3:
-							print("List Student")
+							print("=============================================")
+							print("\t\tStudent List\t\t\n\n")
+							for row in student_data:
+								print(f'Form Number : {row["form_no"]}\nStudent Name : {row["name"]}\n\n')
+							print("=============================================")
+
 						elif op == 4:
 							print("Update Student Rank")
 						elif op == 5:
-							student_data,capacity_data=round1(student_data,capacity_data)
+							student_data,capacity_data=round1(student_data,capacity_data,preference_dict,course_dict)
+							print("YES")
 
 						elif op == 6:
-							student_data,capacity_data=round2(student_data,capacity_data)
+							student_data,capacity_data=round2(student_data,capacity_data,preference_dict,course_dict)
 
 						elif op == 7:
+
+							print("\t\tLIST OF STUDENTS")
 							cnt = 0
 							for row in student_data:
 								if row['allocated_course_name'] != 'NA':

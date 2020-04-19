@@ -1,5 +1,6 @@
 from data import *
 from Algorithm import *
+from studentRegistration import studentRegistration,getEligibility
 
 def menu():
 	print("\n0. SIGN OUT\n1. LIST COURSES\n2. LIST CENTERS\n3. GIVE PREFERENCES\n4. SEE ALLOCATED CENTER COURSES\n5. UPDATE PAYMENT DETAILS")
@@ -38,11 +39,25 @@ def isValid(student_data):
 def student_menu():
 	print("\n\t\tSTUDENT SYSTEM\t\t\n")
 	student_data = pull("data-files/students.csv")
-	capacity_data = pull("data-files/capacities.csv")
+	# capacity_data = pull("data-files/capacities.csv")
+	eligibility_data = getEligibility()
+	form_number = len(student_data)
+	form_number +=1
 	ch = getChoice()
 	while(ch):
 		if ch == 1:
-			print("Register Student")
+			new_student_data = dict()
+			newStudent = studentRegistration(form_number,eligibility_data)
+			try:
+				newStudent.accept()
+				new_student_data = newStudent.getRecord()
+			except Exception as ex:
+				print(ex)
+			
+			if len(new_student_data)!=0:
+				student_data.append(new_student_data)
+				form_number+=1
+			
 		elif ch == 2:
 			# Validating Student
 			try:
@@ -54,11 +69,14 @@ def student_menu():
 						if op == 1:
 							# THIS OF GETTING LIST OF COURSES
 							course_data = pull("data-files/courses.csv")
-
+							courses = eligibility_data.get(student_data[index]['degree'])
+							courses = courses[1]
+							
 							print("================================================")
-							print("\t\tAVAILABLE COURSES\t\t\n")
+							print("\t\tAVAILABLE COURSES ACCORDING TO YOUR DEGREE\t\t\n")
 							for row in course_data:
-								print(f'Course Name : {row["name"]}\nFees : {row["fees"]}\nSection Rank Required : {row["section"]}\n\n')
+								if row['name'] in courses:
+									print(f'Course Name : {row["name"]}\nFees : {row["fees"]}\nSection Rank Required : {row["section"]}\n\n')
 							print("================================================")
 
 
@@ -75,9 +93,17 @@ def student_menu():
 						elif op == 3:
 							print("GIVE PREFERENCES")
 						elif op == 4:
-							print("SEE ALLOCATED COURSES/CENTERS")
+							# For giving acknowledgement to student about their allocation
+							data = student_data[index]
+
+							if int(data['allocated_preference']) <= 0:
+								print(f'Sorry {data["name"]}! There is no center allocated to you.')
+							else:
+								print(f'Hello {data["name"]}, your allocated center is {data["allocated_center_id"]} for {data["allocated_course_name"]}.')
+								
+
 						elif op == 5:
-							if student_data[index]['allocated_preference'] == '0':
+							if int(student_data[index]['allocated_preference']) <= 0:
 								print(f'Sorry {student_data[index]["name"]}! There is no center allocated to you.')
 							else:
 								print(f'Hello {student_data[index]["name"]}, your allocated center is {student_data[index]["allocated_center_id"]} for {student_data[index]["allocated_course_name"]}.')

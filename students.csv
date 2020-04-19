@@ -19,3 +19,4 @@ form_no,name,A,B,C,degree,precentage,allocated_preference,allocated_course_name,
 18,john,76,124,86,M.Sc. Computer,82.23,0,NA,NA,0,0,NA
 19,shrinidhi,199,99,-1,B.E. Electrical,82.12,0,NA,NA,0,0,NA
 20,vani,59,101,97,B.E. Mechanical,82.11,0,NA,NA,0,0,NA
+course,degree,min_percentage//

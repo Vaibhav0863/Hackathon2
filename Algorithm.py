@@ -1,9 +1,10 @@
 from data import *
-def getCourses(sec):
+
+
+def getCourses():
 	course_data = pull("data-files/courses.csv")
 
-	courses = {}
-
+	courses = dict()
 	sections = ["A","B","C"]
 	for i in sections:
 		temp = []
@@ -13,13 +14,13 @@ def getCourses(sec):
 				temp.append(row['name'])
 		courses[i] = temp
 
-	return courses.get(sec)
+	return courses
 
-def getPerefList(id):
+def getPerefList():
 	preference_data = pull('data-files/preferences.csv')
 	student_data = pull('data-files/students.csv')
 
-	preference_dict = {}
+	preference_dict = dict()
 
 	for row in student_data:
 		temp = []
@@ -30,7 +31,7 @@ def getPerefList(id):
 		if len(temp)!=0:
 			preference_dict[row['form_no']] = temp
 
-	return preference_dict.get(id,-1)
+	return preference_dict
 
 # THIS IS USED FOR INCREMENTING COUNT OF ALLOCATED STUDENT
 def incrementor(capacity_data,center_id,course,preference_no,student_row):
@@ -55,7 +56,7 @@ def decrementer(capacity,student):
 
 # THIS IS FOR ALLOCATION ROUND 1
 
-def round1(student_data,capacity_data):
+def round1(student_data,capacity_data,preference_dict,course_dict):
 	# student_data = pull('data-files/students.csv')
 
 	# capacity_data = pull("data-files/capacities.csv")
@@ -67,8 +68,8 @@ def round1(student_data,capacity_data):
 		student_data = sorted(student_data,key = lambda row : int(row[rank]))
 		for row in student_data:
 			if int(row[rank]) > 0 and int(row['allocated_preference']) == 0:
-				preferances_data = getPerefList(row['form_no'])
-				courses = getCourses(rank)
+				preferances_data = preference_dict.get(row['form_no'],-1)
+				courses = course_dict.get(rank)
 				
 
 				if preferances_data != -1:
@@ -88,7 +89,7 @@ def round1(student_data,capacity_data):
 
 # THIS IS FOR ALLOCATION ROUND 2
 
-def round2(student_data,capacity_data):
+def round2(student_data,capacity_data,preference_dict,course_dict):
 	# student_data = pull('student_round1.csv')
 
 	# capacity_data = pull("capacity_round1.csv")
@@ -105,8 +106,8 @@ def round2(student_data,capacity_data):
 		# FIRST SORT STUDENT DATA BY SECTION
 		student_data = sorted(student_data,key = lambda row : int(row[rank]))
 		for row in student_data:
-			preferances_data = getPerefList(row['form_no'])
-			courses = getCourses(rank)
+			preferances_data = preference_dict.get(row['form_no'],-1)
+			courses = course_dict.get(rank)
 					
 			# Student get preferece and also make payment
 			if int(row['allocated_preference']) != 0 and int(row['payment']) != 0:
@@ -129,7 +130,6 @@ def round2(student_data,capacity_data):
 							incrementor(capacity_data,center_id,course_name,preference_no,row)
 							
 
-	
 	student_data = sorted(student_data, key = lambda row : int(row['form_no']))
 
 	# pushF('student_round2.csv',student_data)
