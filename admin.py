@@ -1,5 +1,6 @@
 from data import *
 from Algorithm import *
+from datetime import datetime
 
 # Getting Choice from use
 def getChoice():
@@ -85,31 +86,104 @@ def admin_menu():
 							print("=============================================")
 
 						elif op == 4:
-							print("Update Student Rank")
+							# UPDATING RANK OF STUDENT 
+							form_no = int(input("Enter The Form Number of Student : "))
+							sections = ['A','B','C']
+							for section in sections:
+								rank = input(f'Enter The Rank of Section {section} : ')
+								if len(rank) != 0:
+									if int(rank)>0:
+										student_data[form_no-1][section] = rank
+									else:
+										print("Invalid Rank!")
+
+							print("===============================================")
+							print("RANK OF STUDENT UPDATED!")
+							print("===============================================")
 						elif op == 5:
+							# Center Allocation Round 1
 							student_data,capacity_data=round1(student_data,capacity_data,preference_dict,course_dict)
-							print("YES")
 
 						elif op == 6:
+							# Center Allocation Round 2
 							student_data,capacity_data=round2(student_data,capacity_data,preference_dict,course_dict)
 
 						elif op == 7:
-
-							print("\t\tLIST OF STUDENTS")
+							# Getting List of Allocated students
+							print("===========================================")
+							print("LIST OF ALLOCATED STUDENTS\n".center(40,' '))
 							cnt = 0
 							for row in student_data:
 								if row['allocated_course_name'] != 'NA':
 									print(f'{row["form_no"]}=={row["name"]}=={row["allocated_course_name"]}=={row["allocated_center_id"]}')
 									cnt+=1
-							print(cnt)
+							if cnt == 0:
+								print("No Record Found!")
+							
+							print("===========================================")
+									
 						elif op == 8:
-							print("List of Paid Student")
+							# GETTING LIST OF PAID STUDENT
+							print("===========================================")
+							print("LIST OF PAID STUDENTS\n".center(40,' '))
+							cnt = 0
+							for student_row in student_data:
+								if student_row['payment'] != '0':
+									print(f'FORM NUMBER : {student_row["form_no"]}\nNAME : {student_row["name"]}\n\n')
+									cnt+=1
+							if cnt == 0:
+								print("No Record Found!")
+							print("===========================================")
 						elif op == 9:
-							print("List reported (at center) students")
+							# GETTING LIST OF REPORTED STUDENTS
+							print("===========================================")
+							print("LIST OF REPORTED STUDENTS\n".center(40,' '))
+							cnt = 0
+							for row in student_data:
+								if row['reported_to_center'] != '0':
+									print(f'FORM NUMBER : {row["form_no"]}\nNAME : {row["name"]}\nCOURSE : {row["allocated_course_name"]}\nCENTER : {row["allocated_center_id"]}\n\n')
+									cnt+=1
+							if cnt == 0:
+								print("No Record Found!")
+							
+							print("===========================================")
 						elif op == 10:
-							print("Generate PRN")
+							# UPDATING PRN OF STUDENT WHO REPORTED TO CENTER
+							year = datetime.now().year
+							year = year*1000
+							prn = "PRN"
+							flag = 1
+							for student_row in student_data:
+								if student_row['reported_to_center'] != '0':
+									year += int(student_row['form_no'])
+									prn += str(year)
+									student_row['prn'] = prn
+									flag = 0
+							if flag:
+								print("===========================================")
+								print("No Record Found!")
+								print("===========================================")
+							else:
+								print("===========================================")
+								print("Updated PRN Number of Students!")
+								print("===========================================")
+							
+
+
+
 						elif op == 11:
-							print("List admitted students (with PRN) for given center")
+							# GETTING LIST OF ADMITTED STUDENT
+							print("===========================================")
+							print("LIST OF REPORTED STUDENTS\n".center(40,' '))
+							cnt = 0
+							for row in student_data:
+								if row['prn'] != 'NA':
+									print(f'FORM NUMBER : {row["form_no"]}\nNAME : {row["name"]}\nCOURSE : {row["allocated_course_name"]}\nCENTER : {row["allocated_center_id"]}\n\n')
+									cnt+=1
+							if cnt == 0:
+								print("No Record Found!")
+							
+							print("===========================================")
 						else:
 							print("Invalid Input...")
 						op = getMenuChoice()
