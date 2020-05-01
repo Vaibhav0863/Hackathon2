@@ -115,20 +115,26 @@ def admin_menu():
 							cnt = 0
 							for row in student_data:
 								if row['allocated_course_name'] != 'NA':
-									print(f'{row["form_no"]}=={row["name"]}=={row["allocated_course_name"]}=={row["allocated_center_id"]}')
+									print(f'{row["form_no"]}=={row["name"]}=={row["allocated_preference"]}=={row["allocated_course_name"]}=={row["allocated_center_id"]}=={row["payment"]}=={row["prn"]}')
 									cnt+=1
 							if cnt == 0:
 								print("No Record Found!")
+							else:
+								print(cnt)
 							
 							print("===========================================")
 									
 						elif op == 8:
 							# GETTING LIST OF PAID STUDENT
+							student_data = sorted(student_data,key = lambda row : row['allocated_course_name'])
+							student_data = sorted(student_data,key = lambda row : row['allocated_center_id'])
+							student_data = sorted(student_data,key = lambda row : row['name'])
+							student_data = sorted(student_data,key = lambda row : int(row['payment']))
 							print("===========================================")
 							print("LIST OF PAID STUDENTS\n".center(40,' '))
 							cnt = 0
 							for student_row in student_data:
-								if student_row['payment'] != '0':
+								if student_row["allocated_course_name"]!="NA" and student_row["allocated_center_id"]!="NA" and int(student_row['payment']) > 0:
 									print(f'FORM NUMBER : {student_row["form_no"]}\nNAME : {student_row["name"]}\n\n')
 									cnt+=1
 							if cnt == 0:
@@ -136,11 +142,16 @@ def admin_menu():
 							print("===========================================")
 						elif op == 9:
 							# GETTING LIST OF REPORTED STUDENTS
+							
+							student_data = sorted(student_data,key = lambda row : row['allocated_course_name'])
+							student_data = sorted(student_data,key = lambda row : row['allocated_center_id'])
+							student_data = sorted(student_data,key = lambda row : row['name'])
+							
 							print("===========================================")
 							print("LIST OF REPORTED STUDENTS\n".center(40,' '))
 							cnt = 0
 							for row in student_data:
-								if row['reported_to_center'] != '0':
+								if row['reported_to_center'] == '1':
 									print(f'FORM NUMBER : {row["form_no"]}\nNAME : {row["name"]}\nCOURSE : {row["allocated_course_name"]}\nCENTER : {row["allocated_center_id"]}\n\n')
 									cnt+=1
 							if cnt == 0:
@@ -149,15 +160,18 @@ def admin_menu():
 							print("===========================================")
 						elif op == 10:
 							# UPDATING PRN OF STUDENT WHO REPORTED TO CENTER
-							year = datetime.now().year
-							year = year*1000
-							prn = "PRN"
+							student_data = sorted(student_data,key = lambda row : row['allocated_course_name'])
+							student_data = sorted(student_data,key = lambda row : row['allocated_center_id'])
+							student_data = sorted(student_data,key = lambda row : row['name'])
+							# year = datetime.now().year
+							# year = year*1000
+							# prn = "PRN"
+							num = 1
 							flag = 1
 							for student_row in student_data:
-								if student_row['reported_to_center'] != '0':
-									year += int(student_row['form_no'])
-									prn += str(year)
-									student_row['prn'] = prn
+								if student_row['reported_to_center'] == '1':
+									student_row['prn'] = student_row['allocated_course_name']+"_"+student_row['allocated_center_id']+"_"+str(num)
+									num+=1
 									flag = 0
 							if flag:
 								print("===========================================")
@@ -168,11 +182,10 @@ def admin_menu():
 								print("Updated PRN Number of Students!")
 								print("===========================================")
 							
-
-
-
 						elif op == 11:
 							# GETTING LIST OF ADMITTED STUDENT
+							student_data = sorted(student_data,key = lambda row : row['allocated_course_name'])
+							student_data = sorted(student_data,key = lambda row : row['allocated_center_id'])
 							print("===========================================")
 							print("LIST OF REPORTED STUDENTS\n".center(40,' '))
 							cnt = 0
@@ -193,5 +206,6 @@ def admin_menu():
 			print("Invalid Input")
 
 		ch = getChoice()
+	student_data = sorted(student_data, key = lambda row : int(row['form_no']))
 	pushF("data-files/students.csv",student_data)
 	pushF("data-files/capacities.csv",capacity_data)

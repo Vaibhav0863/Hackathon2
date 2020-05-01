@@ -1,8 +1,8 @@
 form_no,name,A,B,C,degree,precentage,allocated_preference,allocated_course_name,allocated_center_id,payment,reported_to_center,prn
 
-1,tisha,73,135,76,M.Sc. Statistics,84.9,0,NA,NA,0,0,NA
+1,tisha,73,135,76,M.Sc. Statistics,84.9,0,PG_DAC,SIP,0,1,NA
 
-2,siya,155,65,19,B.E. Mechanical,84.82,0,NA,NA,0,0,NA
+2,siya,155,65,19,B.E. Mechanical,84.82,0,PD_DBDA,ACN,0,1,NA
 
 3,dia,19,110,54,B.E. Electrical,84.71,0,NA,NA,0,0,NA
 

@@ -1,5 +1,6 @@
 from student import student_menu
 from admin import admin_menu
+from center_coordinator import center_menu
 
 def getChoice():
 	print("==========================================================")
@@ -23,7 +24,8 @@ def main():
 			# This is for admin
 			admin_menu()
 		elif op == 3:
-			print("CENTER COORDINATOR")
+			# This is for center Coordinator
+			center_menu()
 		else:
 			print("Invalid Choice")
 
